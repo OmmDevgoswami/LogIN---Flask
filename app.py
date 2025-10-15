@@ -90,4 +90,4 @@ def login():
             return {"message": "Invalid username or password"}, 401
 
 if __name__ == "__main__":
-    app.run(debug=False)
+    app.run(debug=True)
