@@ -17,14 +17,8 @@ app.config["SECRET_KEY"] = os.getenv("FLASK_SECRET_KEY")
 class Base(DeclarativeBase):
     pass
 
-database_url = (os.getenv("DATABASE_URL") or os.getenv("POSTGRESQL_DATABASE") or "sqlite:///users.db")
-
-if database_url.startswith("postgres://"):
-    database_url = database_url.replace("postgres://", "postgresql://")
-
-app.config["SQLALCHEMY_DATABASE_URI"] = database_url
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("POSTGRESQL_DATABASE")
+# os.getenv("DATABASE_URL") 
 db = SQLAlchemy(model_class=Base)
 db.init_app(app)
 
@@ -97,4 +91,4 @@ def login():
             return {"message": "Invalid username or password"}, 401
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug = False)
