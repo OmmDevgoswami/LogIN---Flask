@@ -17,7 +17,14 @@ app.config["SECRET_KEY"] = os.getenv("FLASK_SECRET_KEY")
 class Base(DeclarativeBase):
     pass
 
-app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL") or os.getenv("POSTGRESQL_DATABASE")
+database_url = (os.getenv("DATABASE_URL") or os.getenv("POSTGRESQL_DATABASE") or "sqlite:///users.db")
+
+if database_url.startswith("postgres://"):
+    database_url = database_url.replace("postgres://", "postgresql://")
+
+app.config["SQLALCHEMY_DATABASE_URI"] = database_url
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
 db = SQLAlchemy(model_class=Base)
 db.init_app(app)
 
