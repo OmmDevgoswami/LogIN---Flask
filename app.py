@@ -18,6 +18,8 @@ class Base(DeclarativeBase):
     pass
 
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("POSTGRESQL_DATABASE")
+# print("Connected to:", app.config["SQLALCHEMY_DATABASE_URI"])
+
 db = SQLAlchemy(model_class=Base)
 db.init_app(app)
 
