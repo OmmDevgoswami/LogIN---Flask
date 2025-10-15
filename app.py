@@ -18,7 +18,6 @@ class Base(DeclarativeBase):
     pass
 
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("POSTGRESQL_DATABASE")
-# os.getenv("DATABASE_URL") 
 db = SQLAlchemy(model_class=Base)
 db.init_app(app)
 
@@ -91,4 +90,4 @@ def login():
             return {"message": "Invalid username or password"}, 401
 
 if __name__ == "__main__":
-    app.run(debug = False)
+    app.run(debug=False)
