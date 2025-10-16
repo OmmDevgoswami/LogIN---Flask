@@ -17,7 +17,7 @@ app.config["SECRET_KEY"] = os.getenv("FLASK_SECRET_KEY")
 class Base(DeclarativeBase):
     pass
 
-app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv('POSTGRESQL_DATABASE', ' sqlite:///users.db')
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://flask_auth_db_ty77_user:uTbMItcfbee41zWqDnQ1yQvp0Cg8LNtk@dpg-d3ntlsmr433s73ennivg-a.singapore-postgres.render.com/flask_auth_db_ty77"
 # print("Connected to:", app.config["SQLALCHEMY_DATABASE_URI"])
 
 db = SQLAlchemy(model_class=Base)
