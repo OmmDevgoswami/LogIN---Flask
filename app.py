@@ -17,7 +17,7 @@ app.config["SECRET_KEY"] = os.getenv("FLASK_SECRET_KEY")
 class Base(DeclarativeBase):
     pass
 
-app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("POSTGRESQL_DATABASE")
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL") or os.getenv("POSTGRESQL_DATABASE")
 # print("Connected to:", app.config["SQLALCHEMY_DATABASE_URI"])
 
 db = SQLAlchemy(model_class=Base)
