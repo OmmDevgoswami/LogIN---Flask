@@ -17,8 +17,13 @@ app.config["SECRET_KEY"] = os.getenv("FLASK_SECRET_KEY")
 class Base(DeclarativeBase):
     pass
 
-app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL") or os.getenv("POSTGRESQL_DATABASE")
-# print("Connected to:", app.config["SQLALCHEMY_DATABASE_URI"])
+db_url = os.getenv("DATABASE_URL")
+
+# Render sometimes gives postgres:// instead of postgresql+psycopg://
+if db_url and db_url.startswith("postgres://"):
+    db_url = db_url.replace("postgres://", "postgresql+psycopg://", 1)
+
+app.config["SQLALCHEMY_DATABASE_URI"] = db_url
 
 db = SQLAlchemy(model_class=Base)
 db.init_app(app)
