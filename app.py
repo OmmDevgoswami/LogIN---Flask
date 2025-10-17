@@ -11,6 +11,8 @@ import os
 import dotenv
 import smtplib
 from email.mime.text import MIMEText
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 import random
 
 dotenv.load_dotenv()
@@ -64,20 +66,34 @@ with app.app_context():
     db.create_all()
     
 EMAIL_ADDRESS = os.getenv("EMAIL_USER")
-EMAIL_PASSWORD = os.getenv("EMAIL_PASS")
+# EMAIL_PASSWORD = os.getenv("EMAIL_PASS")
+SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY")
+
+# def send_email(receiver_email, otp_code):
+#     from email.mime.text import MIMEText
+
+#     msg = MIMEText(f"Your login OTP is: {otp_code}\nIt will expire in 3 minutes.")
+#     msg["Subject"] = "Your OTP for Login"
+#     msg["From"] = EMAIL_ADDRESS
+#     msg["To"] = receiver_email
+
+#     with smtplib.SMTP("smtp.gmail.com", 587) as server:
+#         server.starttls()
+#         server.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
+#         server.send_message(msg)
 
 def send_email(receiver_email, otp_code):
-    from email.mime.text import MIMEText
-
-    msg = MIMEText(f"Your login OTP is: {otp_code}\nIt will expire in 3 minutes.")
-    msg["Subject"] = "Your OTP for Login"
-    msg["From"] = EMAIL_ADDRESS
-    msg["To"] = receiver_email
-
-    with smtplib.SMTP("smtp.gmail.com", 587) as server:
-        server.starttls()
-        server.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
-        server.send_message(msg)
+    message = Mail(
+        from_email=EMAIL_ADDRESS,
+        to_emails=receiver_email,
+        subject="Your OTP Code",
+        html_content=f"<strong>Your OTP is: {otp_code}</strong><br>It expires in 3 minutes."
+    )
+    try:
+        sg = SendGridAPIClient(SENDGRID_API_KEY)
+        sg.send(message)
+    except Exception as e:
+        print(f"Failed to send OTP: {e}")
 
 
 
